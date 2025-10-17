@@ -1,48 +1,41 @@
-# Whisper Server Dockerfile
-# Optimized for Arabic speech recognition
+# Python Flask Whisper Server Dockerfile
+# More reliable for cloud deployment
 
-FROM ubuntu:22.04
+FROM python:3.9-slim
 
 # Set environment variables
-ENV DEBIAN_FRONTEND=noninteractive
+ENV PYTHONUNBUFFERED=1
 ENV WHISPER_MODEL=base
 ENV WHISPER_PORT=9000
 ENV WHISPER_LANGUAGE=ar
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    build-essential \
-    git \
-    wget \
-    curl \
-    make \
-    cmake \
-    python3 \
-    python3-pip \
     ffmpeg \
+    build-essential \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
 
-# Clone whisper.cpp
-RUN git clone https://github.com/ggerganov/whisper.cpp .
+# Copy requirements first for better caching
+COPY requirements.txt .
 
-# Build whisper.cpp
-RUN make
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Download Arabic model
-RUN bash ./models/download-ggml-model.sh ${WHISPER_MODEL}
+# Copy the Python server
+COPY whisper_server_fast.py .
 
 # Create startup script
 RUN echo '#!/bin/bash\n\
-echo "Starting Whisper server..."\n\
+echo "Starting Python Whisper server..."\n\
 echo "Model: ${WHISPER_MODEL}"\n\
 echo "Port: ${WHISPER_PORT}"\n\
 echo "Language: ${WHISPER_LANGUAGE}"\n\
 echo "API Endpoint: http://0.0.0.0:${WHISPER_PORT}/inference"\n\
 echo ""\n\
-./build/bin/server --model models/ggml-${WHISPER_MODEL}.bin --host 0.0.0.0 --port ${WHISPER_PORT} --language ${WHISPER_LANGUAGE}' > start.sh
+python whisper_server_fast.py' > start.sh
 
 RUN chmod +x start.sh
 
