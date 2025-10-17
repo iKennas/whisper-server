@@ -42,7 +42,7 @@ echo "Port: ${WHISPER_PORT}"\n\
 echo "Language: ${WHISPER_LANGUAGE}"\n\
 echo "API Endpoint: http://0.0.0.0:${WHISPER_PORT}/inference"\n\
 echo ""\n\
-./server --model models/ggml-${WHISPER_MODEL}.bin --host 0.0.0.0 --port ${WHISPER_PORT} --language ${WHISPER_LANGUAGE}' > start.sh
+./build/bin/server --model models/ggml-${WHISPER_MODEL}.bin --host 0.0.0.0 --port ${WHISPER_PORT} --language ${WHISPER_LANGUAGE}' > start.sh
 
 RUN chmod +x start.sh
 
