@@ -10,6 +10,7 @@ from faster_whisper import WhisperModel
 import tempfile
 import os
 import logging
+import io
 
 app = Flask(__name__)
 CORS(app)
