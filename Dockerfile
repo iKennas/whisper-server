@@ -12,15 +12,6 @@ ENV WHISPER_LANGUAGE=ar
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     ffmpeg \
-    build-essential \
-    pkg-config \
-    libavformat-dev \
-    libavcodec-dev \
-    libavdevice-dev \
-    libavutil-dev \
-    libswscale-dev \
-    libswresample-dev \
-    libavfilter-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
@@ -33,17 +24,17 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the Python server
-COPY whisper_server_fast.py .
+COPY whisper_server_simple.py .
 
 # Create startup script
 RUN echo '#!/bin/bash\n\
-echo "Starting Python Whisper server..."\n\
+echo "Starting Simple Whisper server..."\n\
 echo "Model: ${WHISPER_MODEL}"\n\
 echo "Port: ${WHISPER_PORT}"\n\
 echo "Language: ${WHISPER_LANGUAGE}"\n\
 echo "API Endpoint: http://0.0.0.0:${WHISPER_PORT}/inference"\n\
 echo ""\n\
-python whisper_server_fast.py' > start.sh
+python whisper_server_simple.py' > start.sh
 
 RUN chmod +x start.sh
 
