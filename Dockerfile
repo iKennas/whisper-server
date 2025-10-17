@@ -6,7 +6,7 @@ FROM python:3.9-slim
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 ENV WHISPER_MODEL=base
-ENV WHISPER_PORT=9000
+ENV WHISPER_PORT=8080
 ENV WHISPER_LANGUAGE=ar
 
 # Install system dependencies
@@ -38,12 +38,12 @@ python whisper_server_simple.py' > start.sh
 
 RUN chmod +x start.sh
 
-# Expose port
-EXPOSE ${WHISPER_PORT}
+# Expose port (Google Cloud Run uses 8080)
+EXPOSE 8080
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD curl -f http://localhost:${WHISPER_PORT}/health || exit 1
+    CMD curl -f http://localhost:8080/health || exit 1
 
 # Start the server
 CMD ["./start.sh"]

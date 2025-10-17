@@ -114,11 +114,12 @@ if __name__ == '__main__':
         exit(1)
     
     print("\n✅ Server ready!")
-    print("📍 Endpoint: http://127.0.0.1:9000/inference")
-    print("🌍 Listening on: 0.0.0.0:9000")
+    print("📍 Endpoint: http://127.0.0.1:8080/inference")
+    print("🌍 Listening on: 0.0.0.0:8080")
     print("💡 Optimized for Arabic pronunciation detection")
     print("\n🛑 Press Ctrl+C to stop\n")
     print("="*50)
     
     # Start Flask server
-    app.run(host='0.0.0.0', port=9000, debug=False, threaded=True)
+    port = int(os.environ.get('PORT', 8080))
+    app.run(host='0.0.0.0', port=port, debug=False, threaded=True)

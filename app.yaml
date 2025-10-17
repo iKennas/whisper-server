@@ -1,0 +1,28 @@
+runtime: custom
+env: flex
+
+# This file specifies the configuration for Google App Engine flexible environment
+# For Cloud Run, we'll use cloudbuild.yaml instead, but this is here as backup
+
+service: whisper-server
+
+automatic_scaling:
+  min_num_instances: 0
+  max_num_instances: 10
+
+resources:
+  cpu: 2
+  memory_gb: 2
+
+env_variables:
+  WHISPER_MODEL: base
+  WHISPER_PORT: 8080
+  WHISPER_LANGUAGE: ar
+
+health_check:
+  enable_health_check: True
+  check_interval_sec: 30
+  timeout_sec: 4
+  unhealthy_threshold: 2
+  healthy_threshold: 2
+  restart_threshold: 60
