@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: whisper-server
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    envVars:
+      - key: WHISPER_MODEL
+        value: base
+      - key: WHISPER_PORT
+        value: 9000
+      - key: WHISPER_LANGUAGE
+        value: ar
+    healthCheckPath: /health
